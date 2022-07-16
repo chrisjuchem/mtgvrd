@@ -1,0 +1,19 @@
+version: "3.2"
+networks:
+  mtgvrd:
+services:
+  db:
+    image: mtgvrd_db
+    build:
+      context: .
+      dockerfile: "docker/Dockerfile_postgres"
+#      args:
+    networks:
+      - mtgvrd
+    volumes:
+      - mtgvrd_postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  mtgvrd_postgres:
