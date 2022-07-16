@@ -5,4 +5,6 @@
 python3.8 -m virtualenv venv
 . venv/bin/activate
 
-echo "run `. venv/bin/activate` to begin working"
+pip3 install -r requirements.txt
+
+echo "run \`. venv/bin/activate\` to begin working"
