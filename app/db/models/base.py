@@ -6,7 +6,7 @@ from app.db.connection import ensure_session
 
 
 @as_declarative()
-class Base(object):
+class BaseModel(object):
     @classmethod
     def from_dict(cls, d, ignore_extra=False):
         class_columns = class_mapper(cls).attrs.keys()

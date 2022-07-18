@@ -1,5 +1,5 @@
 # all models must be added here so that alembic can look in one place to find
 # everything that it needs to manage
 
-from .base import Base
+from .base import BaseModel
 from .test import Test

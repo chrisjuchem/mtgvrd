@@ -11,12 +11,12 @@ from alembic import context
 sys.path.insert(0, getcwd())
 
 from app.db.connection import get_database_url
-# import Base from the module to make sure we pick up models from other files too
-from app.db.models import Base
+# import BaseModel from the module to make sure we pick up models from other files too
+from app.db.models import BaseModel
 
 
 # support migration auto-generation
-target_metadata = Base.metadata
+target_metadata = BaseModel.metadata
 
 
 # this is the Alembic Config object, which provides
@@ -37,7 +37,6 @@ context_opts = {
     "compare_server_default": True,
     # "include_object": some_func,
 }
-
 
 
 def run_migrations_offline():
