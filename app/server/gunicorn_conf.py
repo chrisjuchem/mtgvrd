@@ -2,24 +2,25 @@ import os
 
 from app.server.request_ids import REQUEST_ID_HEADER
 
+# pylint: disable=invalid-name
+
 accesslog = "-"
 # default: '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 access_log_format = (
-    "%(t)s "      # timestamp
-    '"%(r)s" '    # request string
-    "%(s)s "      # status code
-    "%(M)dms "    # response time
-    "%(h)s "      # remote address
+    "%(t)s "  #       timestamp
+    '"%(r)s" '  #     request string
+    "%(s)s "  #       status code
+    "%(M)dms "  #     response time
+    "%(h)s "  #       remote address
     f"%({{{REQUEST_ID_HEADER}}}o)s "  # request id
-    "ref:%(f)s "  # referrer
-    "%(a)s"       # user agent
+    "ref:%(f)s "  #   referrer
+    "%(a)s"  #        user agent
 )
 loglevel = "info"
 
 bind = "0.0.0.0:{}".format(os.environ.get("APP_PORT", 5000))
 workers = int(os.environ["GUNICORN_WORKERS"])
 threads = int(os.environ["GUNICORN_THREADS"])
-
 
 
 # logger_class = ExtendedGunicornLogger

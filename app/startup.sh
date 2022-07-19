@@ -34,8 +34,5 @@ echo "Connection ready. Running database migrations..."
 alembic upgrade head
 echo "Migrations complete."
 
-# Move to target directory for launch command
-cd ${COMMAND_DIR:-.}
-
 # Run CMD (passed as args)
 exec "$@"

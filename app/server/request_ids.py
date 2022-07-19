@@ -1,5 +1,6 @@
-from flask import g
 from uuid import uuid4
+
+from flask import g
 
 REQUEST_ID_HEADER = "X-Request-Id"
 

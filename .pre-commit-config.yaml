@@ -6,30 +6,30 @@ repos:
     - id: end-of-file-fixer
     - id: check-yaml
 
-  - repo: local
-    hooks:
-
-    - id: black
-      name: black
-      entry: black
-      language: system
-      types: [ python ]
-
-    - id: isort
-      name: isort
-      entry: isort
-      language: system
-      types: [ python ]
-
-    - id: pylint
-      name: pylint
-      entry: pylint --reports=no --disable=C  # --rcfile=.pylintrc
-      language: system
-      types: [ python ]
-
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.7.1.1
     hooks:
       - id: shellcheck
         args:
           - --external-sources
+
+  - repo: local
+    hooks:
+
+    - id: black
+      name: black
+      entry: black -l 100
+      language: system
+      types: [ python ]
+
+    - id: isort
+      name: isort
+      entry: isort -l 100
+      language: system
+      types: [ python ]
+
+    - id: pylint
+      name: pylint
+      entry: pylint --rcfile=.pylintrc --reports=no
+      language: system
+      types: [ python ]

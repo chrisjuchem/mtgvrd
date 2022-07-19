@@ -8,10 +8,12 @@ Create Date: 2022-07-16 13:59:57.722064
 from alembic.op import execute
 
 # revision identifiers, used by Alembic.
+# pylint: disable=invalid-name
 revision = "526d2f791081"
 down_revision = None
 branch_labels = None
 depends_on = None
+# pylint: enable=invalid-name
 
 
 def upgrade():

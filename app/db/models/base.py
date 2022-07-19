@@ -6,19 +6,19 @@ from app.db.connection import ensure_session
 
 
 @as_declarative()
-class BaseModel(object):
+class BaseModel:
     @classmethod
-    def from_dict(cls, d, ignore_extra=False):
+    def from_dict(cls, dct, ignore_extra=False):
         class_columns = class_mapper(cls).attrs.keys()
         if ignore_extra:
-            d = {key: val for key, val in d.items() if key in class_columns}
-        return cls(**d)
+            dct = {key: val for key, val in dct.items() if key in class_columns}
+        return cls(**dct)
 
-    def update_from_dict(self, d, ignore_extra=False):
+    def update_from_dict(self, dct, ignore_extra=False):
         class_columns = class_mapper(self.__class__).attrs.keys()
         if ignore_extra:
-            d = {key: val for key, val in d.items() if key in class_columns}
-        for key, val in d.items():
+            dct = {key: val for key, val in dct.items() if key in class_columns}
+        for key, val in dct.items():
             setattr(self, key, val)
 
     @classmethod
@@ -36,5 +36,5 @@ class BaseModel(object):
 
 class IdLookupMixin:
     @classmethod
-    def lookup_by_id(cls, id, session=None):
-        return cls.query(session).get(id)
+    def lookup_by_id(cls, id_, session=None):
+        return cls.query(session).get(id_)

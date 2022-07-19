@@ -4,7 +4,7 @@ from app.db.connection import setup_flask_db_session
 from app.server.app_config import app_config
 from app.server.blueprints import blueprints
 from app.server.logger import setup_flask_logger
-from app.server.request_ids import get_request_id, REQUEST_ID_HEADER
+from app.server.request_ids import REQUEST_ID_HEADER, get_request_id
 
 app = Flask(__name__, static_folder=None)
 app.config.from_object(app_config)

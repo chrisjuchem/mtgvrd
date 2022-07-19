@@ -1,8 +1,9 @@
 from contextlib import contextmanager
 from os import environ
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
+
 from flask_sqlalchemy_session import current_session, flask_scoped_session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 
 def get_database_url():
@@ -36,8 +37,8 @@ def ensure_session(session=None):
     elif current_session:
         yield current_session
     else:
-        s = session_factory()
+        new_session = session_factory()
         try:
-            yield s
+            yield new_session
         finally:
-            s.close()
+            new_session.close()

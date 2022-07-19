@@ -1,22 +1,19 @@
-from os import getcwd
-import sys
 import logging
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+import sys
+from os import getcwd
 
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 # Set up path to app
 sys.path.insert(0, getcwd())
 
-from app.db.connection import get_database_url
 # import BaseModel from the module to make sure we pick up models from other files too
-from app.db.models import BaseModel
-
+from app.db.connection import get_database_url  # pylint: disable=wrong-import-position
+from app.db.models import BaseModel  # pylint: disable=wrong-import-position
 
 # support migration auto-generation
-target_metadata = BaseModel.metadata
+target_metadata = BaseModel.metadata  # pylint: disable=no-member
 
 
 # this is the Alembic Config object, which provides
@@ -101,4 +98,4 @@ try:
     run_migrations()
 except Exception:
     logging.exception("Exception while running versions")
-    exit(1)
+    sys.exit(1)

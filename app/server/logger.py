@@ -1,11 +1,10 @@
 import json
 import logging
 import sys
-from collections import Mapping
+from collections.abc import Mapping
 from itertools import chain
 
 from app.server.request_ids import get_request_id
-
 
 DEFAULT_LOGGER_NAME = __name__
 LOGGED_FIELDS = {"file": "%(pathname)s:%(lineno)d"}
@@ -51,26 +50,26 @@ class JsonLogFormatter(logging.Formatter):
         if request_id:
             log["request_id"] = request_id
 
-        log["timestamp"] = self.formatTime(
-            record, datefmt="%Y-%m-%d %H:%M:%S.{:03.0f} %z"
-        ).format(record.msecs)
+        log["timestamp"] = self.formatTime(record, datefmt="%Y-%m-%d %H:%M:%S.{:03.0f} %z").format(
+            record.msecs
+        )
         log["message"] = record.getMessage()
         return json.dumps(log)
 
 
 class CustomLogger(logging.Logger):
-    def makeRecord(
-            self,
-            name,
-            level,
-            fn,
-            lno,
-            msg,
-            args,
-            exc_info,
-            func=None,
-            extra=None,
-            sinfo=None,
+    def makeRecord(  # pylint: disable=too-many-arguments
+        self,
+        name,
+        level,
+        fn,
+        lno,
+        msg,
+        args,
+        exc_info,
+        func=None,
+        extra=None,
+        sinfo=None,
     ):
         """
         Nest `extra` 1 level deeper so all the extras are easy to find and format
@@ -79,9 +78,7 @@ class CustomLogger(logging.Logger):
             "extra": extra,
             # could splat extra here to make available in log strings
         }
-        return super().makeRecord(
-            name, level, fn, lno, msg, args, exc_info, func, extra, sinfo
-        )
+        return super().makeRecord(name, level, fn, lno, msg, args, exc_info, func, extra, sinfo)
 
 
 # this applies to both the api and flask loggers
@@ -100,6 +97,4 @@ def get_logger():
 def setup_flask_logger(app):
     # Setup flask logging (uncaught exceptions, etc.)
     app.logger.setLevel("INFO")
-    app.logger.handlers[0].setFormatter(
-        JsonLogFormatter(extra_fields=LOGGED_FIELDS)
-    )
+    app.logger.handlers[0].setFormatter(JsonLogFormatter(extra_fields=LOGGED_FIELDS))
