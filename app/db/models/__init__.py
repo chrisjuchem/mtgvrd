@@ -2,4 +2,3 @@
 # everything that it needs to manage
 
 from .base import BaseModel
-from .test import Test
