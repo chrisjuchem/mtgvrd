@@ -97,4 +97,4 @@ def get_logger():
 def setup_flask_logger(app):
     # Setup flask logging (uncaught exceptions, etc.)
     app.logger.setLevel("INFO")
-    app.logger.handlers[0].setFormatter(JsonLogFormatter(extra_fields=LOGGED_FIELDS))
+    # app.logger.handlers[0].setFormatter(JsonLogFormatter(extra_fields=LOGGED_FIELDS))
