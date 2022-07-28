@@ -21,8 +21,11 @@ enable=
 # --disable=W"
 disable=missing-module-docstring,
   missing-class-docstring,
+  missing-function-docstring,
   too-few-public-methods,
   consider-using-f-string,
+  fixme,
+  logging-format-interpolation,
 
 
 [REPORTS]
@@ -93,7 +96,7 @@ ignored-classes=alembic.context,alembic.op
 [BASIC]
 
 # Good variable names which should always be accepted, separated by a comma
-good-names=f,i,j,k,x,y,_,__
+good-names=f,i,j,k,n,x,y,_,__,id
 
 # Colon-delimited sets of names that determine each other's naming style when
 # the name regexes allow several styles.
