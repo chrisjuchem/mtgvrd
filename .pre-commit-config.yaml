@@ -24,7 +24,7 @@ repos:
 
     - id: isort
       name: isort
-      entry: isort -l 100
+      entry: isort -l 100 --profile black
       language: system
       types: [ python ]
 
