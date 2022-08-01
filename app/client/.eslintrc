@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "airbnb/base",
+    "eslint-config-prettier",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:json/recommended"
+  ],
+  "plugins": [
+    "react",
+    "react-hooks",
+    "you-dont-need-lodash-underscore"
+  ],
+  "parser": "@babel/eslint-parser",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "react/prop-types": 0,
+
+    "arrow-body-style": 1,
+    "spaced-comment": 1,
+    "no-console": [1, { "allow": ["warn", "error"] }],
+    "no-unused-vars": [1, {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "caughtErrorsIgnorePattern": "^_"
+    }],
+
+    "import/no-extraneous-dependencies": [2, { "devDependencies": true }]
+  }
+}

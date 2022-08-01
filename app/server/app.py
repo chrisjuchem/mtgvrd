@@ -1,8 +1,9 @@
 from flask import Flask
 
 from app.db.connection import setup_flask_db_session
-from app.server.app_config import app_config
 from app.server.blueprints import blueprints
+from app.server.blueprints.login import setup_login
+from app.server.config import app_config
 from app.server.logger import setup_flask_logger
 from app.server.request_ids import REQUEST_ID_HEADER, get_request_id
 from app.server.routing import setup_routing
@@ -13,6 +14,7 @@ app.config.from_object(app_config)
 setup_flask_logger(app)
 setup_flask_db_session(app)
 setup_routing(app)
+setup_login(app)
 
 for blueprint, prefix in blueprints:
     app.register_blueprint(blueprint, url_prefix=prefix)

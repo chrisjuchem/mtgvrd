@@ -33,3 +33,15 @@ repos:
       entry: pylint --rcfile=.pylintrc --reports=no
       language: system
       types: [ python ]
+
+    - id: prettier
+      name: prettier
+      entry: bash -c "yarn --cwd app/client prettier --write --list-different $(echo $@ | sed 's#app/client/##g')" prettier
+      language: system
+      types_or: [javascript, scss, css, html]
+
+    - id: eslint
+      name: eslint
+      entry: bash -c "yarn --cwd app/client eslint --max-warnings 0 $(echo $@ | sed 's#app/client/##g')" eslint
+      language: system
+      types_or: [javascript]

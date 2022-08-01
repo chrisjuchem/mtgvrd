@@ -1,33 +1,70 @@
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import NavBar from './components/nav/nav';
+import {LoginProvider} from './contexts/login';
+import Footer from './components/footer/footer';
 
-import {useEffect, useState} from 'react';
+const TempHomePage = () => (
+  <div className="page">
+    <img src={logo} className="App-logo" alt="logo" style={{height: '40vmin'}} />
+    <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
+      Learn React
+    </a>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+    <div>TEST</div>
+  </div>
+);
 
 function App() {
-  const [text, setText] = useState(<p>Edit <code>src/App.js</code> and save to reload.</p>)
-
-  useEffect(() => {
-    setTimeout(async () => {
-      const resp = await fetch('/ping');
-      setText(<p>{await resp.text()}</p>);
-    }, 1000);
-  }, [])
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {text}
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <LoginProvider>
+        <NavBar />
+
+        <div className="app">
+          <div className="content">
+            <Routes>
+              <Route path="foo" element={<div className="page"> FOO </div>} />
+              <Route index element={<TempHomePage />} />
+            </Routes>
+          </div>
+          <Footer />
+        </div>
+      </LoginProvider>
+    </BrowserRouter>
   );
 }
 
