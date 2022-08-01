@@ -1,18 +1,19 @@
 from contextlib import contextmanager
-from os import environ
 
 from flask_sqlalchemy_session import current_session, flask_scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from app.server.config import config
+
 
 def get_database_url():
     url = "postgresql://{}:{}@{}:{}/{}".format(
-        environ.get("DB_USER", "local_db_user"),
-        environ.get("DB_PASSWORD", "blacklotus"),
-        environ.get("DB_HOST", "0.0.0.0"),
-        environ.get("DB_PORT", "5432"),
-        environ.get("DB_NAME", "mtgvrd"),
+        config["DB_USER"],
+        config["DB_PASSWORD"],
+        config["DB_HOST"],
+        config["DB_PORT"],
+        config["DB_NAME"],
     )
     return url
 

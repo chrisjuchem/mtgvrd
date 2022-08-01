@@ -4,3 +4,4 @@
 from .base import BaseModel
 from .card import Card
 from .draft import Draft, Pick, Seat
+from .user import User
