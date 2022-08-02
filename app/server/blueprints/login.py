@@ -93,5 +93,5 @@ def oauth_callback(_request_data, provider):
 @login_routes.route("/logout")
 @validate(ParamSources.QUERY_ARGS, redirect_trafaret)
 def logout(validated_data):
-    session.pop("uid")
+    session.pop("uid", None)
     return redirect(validated_data.get("back_to", "/"))
