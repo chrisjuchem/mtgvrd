@@ -8,7 +8,11 @@ python3.8 -m virtualenv venv
 pip3 install -r requirements.txt
 pip3 install -r requirements-dev.txt
 (cd app/client && yarn)
+sudo npm i -g nf
 
 pre-commit install
 
-echo "Run \`. venv/bin/activate\` to begin working if this was not sourced"
+echo
+echo "+=====================================================================+"
+echo "| Run \`. venv/bin/activate\` to begin working if this was not sourced! |"
+echo "+=====================================================================+"
