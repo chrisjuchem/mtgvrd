@@ -2,19 +2,22 @@
 
 ## Useful commands for development
 
-- Dev environment
+- Get Started
   - `. first_time_setup.sh` - Perform first-time setup for a new env. Note: this should be sourced
     instead of run directly.
-  - `docker-compose up -d` - Start the postgres database in the background
-  - `./db.sh` - Connect to the local database
-  - `docker-compose down` - Stop the local database
   - `. venv/bin/activate` - Start using the virtual environment
+  - Create `app/sevrer/secrets.json` with secret values.
+  - `./launch_dev.sh` - Start the db, api, and client in parallel
   - `deactivate` - Stop using the virtual environment
 - Application
   - `./start-app.sh` - Start the app with flask dev server, including running the latest migrations.
   - `./start-app.sh -g` - Start the app with gunicorn (production config), including running the latest migrations.
-  - `yarn start` - Start the React dev server to serve frontend with hotloading
-  - `yarn build` - Create build assets from the react app to be served by flask
+  - `yarn --cwd app/client start` - Start the React dev server to serve frontend with hotloading
+  - `yarn --cwd app/client build` - Create build assets from the react app to be served by flask
+- Database
+  - `docker-compose up -d` - Start the postgres database in the background
+  - `./db.sh` - Connect to the local database
+  - `docker-compose down` - Stop the local database
 - Database migrations
   - `alembic revision --autogenerate -m "migration name"` - Create a new migration that will bring
     the database up to the current state of the models in source code.
