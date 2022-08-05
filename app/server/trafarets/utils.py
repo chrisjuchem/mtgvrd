@@ -21,3 +21,12 @@ class UUID(t.String):
             UUID_(super().check_and_return(value))
         except ValueError as exc:
             raise t.DataError("invalid UUID format") from exc
+
+
+base_list_trafaret = t.Dict(
+    {
+        # add one to the limit to easily check if the query has more or not
+        t.Key("limit", default=50): t.ToInt(gte=0, lte=100) >> (lambda n: n + 1),
+        t.Key("offset", default=0): t.ToInt(gte=0),
+    }
+)
