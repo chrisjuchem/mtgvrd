@@ -11,7 +11,7 @@ def format_draft(draft):
         "picks": [format_pick(p) for p in draft.finalized_picks],
     }
 
-    preloads = draft.seat_preloads(seat_no=2)  # TODO swap to current user
+    preloads = draft.seat_preloads()  # TODO swap to current user
     if preloads:
         ret["preloads"] = [format_pick(p) for p in preloads]
 

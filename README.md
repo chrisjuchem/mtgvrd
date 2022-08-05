@@ -15,9 +15,11 @@
   - `yarn --cwd app/client start` - Start the React dev server to serve frontend with hotloading
   - `yarn --cwd app/client build` - Create build assets from the react app to be served by flask
 - Database
+  - `docker-compose build` - Build the image for the local db container
   - `docker-compose up -d` - Start the postgres database in the background
   - `./db.sh` - Connect to the local database
   - `docker-compose down` - Stop the local database
+  - `docker-compose down --volumes` - Nuke the local db. It will need to be rebuilt.
 - Database migrations
   - `alembic revision --autogenerate -m "migration name"` - Create a new migration that will bring
     the database up to the current state of the models in source code.

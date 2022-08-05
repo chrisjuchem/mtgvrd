@@ -9,8 +9,8 @@ class User(BaseModel):
 
     id = Column(UUID, primary_key=True, server_default=func.uuid_generate_v4())
     username = Column(String(32), nullable=False)
-    discord_id = Column(String(24), nullable=False)
-    last_login = Column(DateTime, nullable=False)
+    discord_id = Column(String(24))
+    last_login = Column(DateTime)
 
     __table_args__ = (Index("discord_idx", discord_id, unique=True),)
 

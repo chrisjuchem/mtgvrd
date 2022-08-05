@@ -1,6 +1,7 @@
 import trafaret as t
 
-from app.server.trafarets.utils import UUID
+from app.server.enums import UserDraftRelationship
+from app.server.trafarets.utils import UUID, base_list_trafaret
 
 create_draft_trafaret = t.Dict(
     {
@@ -18,5 +19,11 @@ pick_trafaret = t.Dict(
     {
         t.Key("card_id"): UUID,
         t.Key("pick_no"): t.Int(gte=0),
+    }
+)
+
+list_draft_trafaret = base_list_trafaret + t.Dict(
+    {
+        t.Key("filter", optional=True): t.Enum(*UserDraftRelationship.ALL),
     }
 )

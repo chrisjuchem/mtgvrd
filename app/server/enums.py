@@ -16,3 +16,10 @@ class StatusCodes:
     HTTP_409_CONFLICT = 409
     HTTP_422_UNPROCESSABLE_ENTITY = 422
     HTTP_500_INTERNAL_SERVER_ERROR = 500
+
+
+class UserDraftRelationship:
+    OWNER = "owner"
+    PARTICIPANT = "participant"
+
+    ALL = [OWNER, PARTICIPANT]

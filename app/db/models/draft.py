@@ -12,6 +12,7 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.collections import attribute_mapped_collection
 
@@ -24,15 +25,19 @@ class Draft(BaseModel, IdLookupMixin):
 
     id = Column(UUID, primary_key=True, server_default=func.uuid_generate_v4())
     name = Column(String)
-    # created_ts
+    created_ts = Column(DateTime, default=func.now())
     start_ts = Column(DateTime)
-    format = Column(Enum("VRD", name="format"), nullable=False, default="VRD")
+    format = Column(Enum("VRD", name="format"), nullable=False, server_default="VRD")
     n_seats = Column(Integer, nullable=False)
-    pick_order = Column(Enum("snake", name="pick_order"), nullable=False, default="snake")
+    pick_order = Column(Enum("snake", name="pick_order"), nullable=False, server_default="snake")
     rounds = Column(Integer, nullable=False)
-    picks_made = Column(Integer, nullable=False, default="0")
+    picks_made = Column(Integer, nullable=False, server_default="0")
+    owner_id = Column(UUID, ForeignKey("users.id"))
 
+    owner = relationship("User")
     seats = relationship("Seat", order_by="Seat.seat_no", back_populates="draft")
+    players = association_proxy("seats", "player")
+
     _pick_dict = relationship(
         "Pick",
         back_populates="draft",
@@ -123,12 +128,13 @@ class Seat(BaseModel, IdLookupMixin):
     id = Column(UUID, primary_key=True, server_default=func.uuid_generate_v4())
     draft_id = Column(UUID, ForeignKey("drafts.id", ondelete="cascade"), nullable=False)
     seat_no = Column(Integer, nullable=False)
-    # player
+    player_id = Column(UUID, ForeignKey("users.id"))
+    joined_ts = Column(DateTime, default=func.now())
     # basics
-    # joined_ts
 
     draft = relationship("Draft", back_populates="seats")
     picks = relationship("Pick", back_populates="seat")
+    player = relationship("User")
     # preloads
 
     __table_args__ = (UniqueConstraint(draft_id, seat_no),)
@@ -140,7 +146,7 @@ class Pick(BaseModel):
     draft_id = Column(UUID, ForeignKey("drafts.id", ondelete="cascade"), nullable=False)
     seat_id = Column(UUID, ForeignKey("seats.id", ondelete="cascade"), nullable=False)
     pick_no = Column(Integer, nullable=False)
-    round = Column(Integer, nullable=False)
+    round = Column(Integer, nullable=False)  # todo calc default?
     card_id = Column(UUID, ForeignKey("cards.oracle_id"), nullable=False)
     pick_ts = Column(DateTime, default=func.now())
     finalized_ts = Column(DateTime)
