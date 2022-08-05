@@ -1,24 +1,22 @@
-import json
 import os
 
+# class ConfigManager:
+#     def __init__(self):
+#         secrets_file = os.environ.get("SECRETS_FILE", "app/server/secrets.json")
+#
+#         if os.path.isfile(secrets_file):
+#             with open(secrets_file, "r", encoding="utf8") as file:
+#                 self.secrets = json.load(file)
+#         else:
+#             self.secrets = {}
+#
+#     def __getitem__(self, key):
+#         if key in os.environ:
+#             return os.environ[key]
+#         return self.secrets[key]
 
-class ConfigManager:
-    def __init__(self):
-        secrets_file = os.environ.get("SECRETS_FILE", "app/server/secrets.json")
 
-        if os.path.isfile(secrets_file):
-            with open(secrets_file, "r", encoding="utf8") as file:
-                self.secrets = json.load(file)
-        else:
-            self.secrets = {}
-
-    def __getitem__(self, key):
-        if key in self.secrets:
-            return self.secrets[key]
-        return os.environ[key]
-
-
-config = ConfigManager()
+config = os.environ
 
 
 # ===================================================

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#. env.sh
-APP_PORT=5000
+. env.sh
 
 echo Starting Flask app on port $APP_PORT
 

@@ -23,6 +23,10 @@ class UUID(t.String):
             raise t.DataError("invalid UUID format") from exc
 
 
+def HelpfulEnum(values=[], field="value"):
+    return t.OnError(t.Enum(*values), "value is not a valid {}".format(field))
+
+
 base_list_trafaret = t.Dict(
     {
         # add one to the limit to easily check if the query has more or not
