@@ -8,8 +8,11 @@
   - `. venv/bin/activate` - Start using the virtual environment
   - Create `app/sevrer/secrets.json` with secret values.
   - `./launch_dev.sh` - Start the db, api, and client in parallel
+  - `. env.sh` - Source local dev environment variables into your shell, and activate the virtual environment
+  - `. env.sh --test` - Source local dev environment variables for testing into your shell
   - `deactivate` - Stop using the virtual environment
 - Application
+- - `docker-compose build` - Build the image for the local db container
   - `./start-app.sh` - Start the app with flask dev server, including running the latest migrations.
   - `./start-app.sh -g` - Start the app with gunicorn (production config), including running the latest migrations.
   - `yarn --cwd app/client start` - Start the React dev server to serve frontend with hotloading

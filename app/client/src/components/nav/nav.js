@@ -12,7 +12,7 @@ const NAV_LINKS = [
 ];
 
 const NavBar = () => {
-  const {userInfo, loading} = useLogin();
+  const {userInfo, loading, loggedIn} = useLogin();
 
   return (
     <div className="nav">
@@ -30,7 +30,7 @@ const NavBar = () => {
 
       <div className="separator" />
 
-      {!loading && (userInfo ? <UserDropdown {...userInfo} /> : <LoginButton provider="discord" />)}
+      {!loading && (loggedIn ? <UserDropdown {...userInfo} /> : <LoginButton provider="discord" />)}
     </div>
   );
 };

@@ -15,7 +15,13 @@ const useFetch = (path, transform) => {
         }
         setData(fetchedData);
       } else {
-        console.error('Request failed: ', await resp.json());
+        let respBody;
+        try {
+          respBody = await resp.clone().json();
+        } catch {
+          respBody = await resp.text();
+        }
+        console.error('Request failed: ', respBody);
       }
       setLoading(false);
     })();
