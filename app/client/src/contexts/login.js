@@ -4,14 +4,15 @@ import useFetch from '../util/useFetch';
 const LoginCtx = React.createContext({});
 
 const LoginProvider = ({children}) => {
-  const [userInfo, loading, setUserInfo, refreshUserInfo] = useFetch('/api/users/me');
+  const [checkInfo, loading, _setCheckInfo, refreshUserInfo] = useFetch('/login/check');
+  const {logged_in: loggedIn, ...userInfo} = checkInfo || {};
 
   return (
     <LoginCtx.Provider
       value={{
-        userInfo,
         loading,
-        setUserInfo,
+        loggedIn,
+        userInfo,
         refreshUserInfo,
       }}
     >
