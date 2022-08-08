@@ -1,7 +1,6 @@
 import os
 
 import pytest
-from flask import session
 from sqlalchemy import func
 
 from app.db.connection import ensure_session
@@ -60,10 +59,18 @@ def user_factory(db_session):
     return factory
 
 
+@pytest.fixture()
+def client_factory():
+    def factory():
+        with app.test_client() as client:
+            return client
+
+    return factory
+
+
 @pytest.fixture
-def no_session_client():
-    with app.test_client() as client:
-        yield client
+def no_session_client(client_factory):
+    yield client_factory()
 
 
 @pytest.fixture
@@ -71,7 +78,17 @@ def session_user(user_factory):
     return user_factory({"username": "session_user"})
 
 
-@pytest.fixture()
-def session_client(no_session_client, session_user):
-    session["uid"] = session_user
-    return no_session_client
+@pytest.fixture
+def user_client_factory(client_factory):
+    def factory(user):
+        client = client_factory()
+        with client.session_transaction() as session:
+            session["uid"] = user.id
+        return client
+
+    return factory
+
+
+@pytest.fixture
+def session_client(user_client_factory, session_user):
+    return user_client_factory(session_user)
