@@ -1,4 +1,3 @@
-from datetime import datetime
 from urllib.parse import parse_qs, urlsplit
 
 import pytest
@@ -6,7 +5,7 @@ import responses
 
 from app.db.models import User
 from app.tests.conftest import MOCK_URLS
-from app.tests.helpers import TestBaseEphemeral
+from app.tests.helpers import ABOUT_NOW, TestBaseEphemeral
 
 
 class TestLogin(TestBaseEphemeral):  # todo enforce this inheritece
@@ -73,7 +72,7 @@ class TestLogin(TestBaseEphemeral):  # todo enforce this inheritece
         user = User.query().first()
         assert user.username == username
         assert getattr(user, f"{provider}_id") == provider_id
-        assert 0 < (datetime.utcnow() - user.last_login).total_seconds() < 1
+        assert user.last_login == ABOUT_NOW
 
         assert no_session_client.get("login/check").json["logged_in"]
         assert no_session_client.get("login/check").json["uid"] == user.id
@@ -124,7 +123,7 @@ class TestLogin(TestBaseEphemeral):  # todo enforce this inheritece
         user = User.lookup_by_id(existing_user.id)
         assert user.username == username
         assert getattr(user, f"{provider}_id") == provider_id
-        assert 0 < (datetime.utcnow() - user.last_login).total_seconds() < 1
+        assert user.last_login == ABOUT_NOW
         assert user.last_login != previous_login
 
         assert no_session_client.get("login/check").json["logged_in"]

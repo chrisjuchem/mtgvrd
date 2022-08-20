@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 
 from app.db.connection import ensure_session
@@ -44,3 +46,16 @@ class ArgClass:
 
     def __eq__(self, other):
         return isinstance(other, self.cls)
+
+
+class AboutNow:
+    def __init__(self, threshold=0.2):
+        self.threshold = threshold
+
+    def __eq__(self, timestamp):
+        if isinstance(timestamp, str):
+            timestamp = datetime.fromisoformat(timestamp)
+        return 0 < (datetime.utcnow() - timestamp).total_seconds() < self.threshold
+
+
+ABOUT_NOW = AboutNow()
