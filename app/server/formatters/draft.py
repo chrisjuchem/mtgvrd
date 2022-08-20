@@ -1,27 +1,33 @@
+from flask import g
+
+from app.server.formatters.user import format_user
+
+
 def format_draft(draft):
-    ret = {
+    return {
         "id": draft.id,
         "name": draft.name,
-        "started_at": draft.start_ts,
+        "owner": format_user(draft.owner),
+        "created_at": draft.created_ts and draft.created_ts.isoformat(),
+        "started_at": draft.start_ts and draft.start_ts.isoformat(),
         "seats": draft.n_seats,
         "rounds": draft.rounds,
         "pick_order": draft.pick_order,
+        "format": draft.format,
+        "multiseat": draft.multiseat,
+        "random_seats": draft.random_seats,
         "picks_completed": draft.picks_made,
         "players": [format_seat(s) for s in draft.seats],
         "picks": [format_pick(p) for p in draft.finalized_picks],
+        "preloads": [format_pick(p) for p in draft.preloads_for(g.current_user)],
     }
-
-    preloads = draft.seat_preloads()  # TODO swap to current user
-    if preloads:
-        ret["preloads"] = [format_pick(p) for p in preloads]
-
-    return ret
 
 
 def format_seat(seat):
     return {
         "id": seat.id,
         "seat_no": seat.seat_no,
+        "player": format_user(seat.player),
     }
 
 

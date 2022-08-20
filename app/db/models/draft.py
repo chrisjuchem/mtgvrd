@@ -30,6 +30,8 @@ class Draft(BaseModel, IdLookupMixin):
     format = Column(Enum("VRD", name="format"), nullable=False, server_default="VRD")
     n_seats = Column(Integer, nullable=False)
     pick_order = Column(Enum("snake", name="pick_order"), nullable=False, server_default="snake")
+    multiseat = Column(Boolean, nullable=False, server_default="f")
+    random_seats = Column(Boolean, nullable=False, server_default="t")
     rounds = Column(Integer, nullable=False)
     picks_made = Column(Integer, nullable=False, server_default="0")
     owner_id = Column(UUID, ForeignKey("users.id"))
@@ -86,20 +88,30 @@ class Draft(BaseModel, IdLookupMixin):
         # return [pick for n, pick in self._pick_dict.items() if n >= self.picks_made]
         return self._pick_query.filter(Pick.pick_no >= Draft.picks_made)
 
-    def seat_preloads(self, seat_no=None, seat=None, seat_id=None):
-        if seat_no:
-            seat = self.seats[seat_no]
-        if seat:
-            seat_id = seat.id
+    @property
+    def next_seat_no(self):
+        taken = set(seat.seat_no for seat in self.seats)
+        for i in range(0, self.n_seats):
+            if i not in taken:
+                return i
+        return None
+
+    def preloads_for(self, player):
+        # if seat_no:
+        #     seat = self.seats[seat_no]
+        # if seat:
+        #     seat_id = seat.id
 
         # return [
         #     pick for n, pick in self._pick_dict.items()
         #     if n >= self.picks_made and (not seat or pick.seat == seat)
         # ]
 
-        if not seat_id:
+        # if not seat_id:
+        if not player:
             return []
-        return self.preloads.filter(Pick.seat_id == seat_id)
+
+        return self.preloads.join(Seat).filter(Seat.player_id == player.id).all()
 
     def seat_for_pick_no(self, pick):
         rnd = pick // self.n_seats
@@ -134,7 +146,7 @@ class Seat(BaseModel, IdLookupMixin):
 
     draft = relationship("Draft", back_populates="seats")
     picks = relationship("Pick", back_populates="seat")
-    player = relationship("User")
+    player = relationship("User", lazy="selectin")
     # preloads
 
     __table_args__ = (UniqueConstraint(draft_id, seat_no),)
@@ -156,7 +168,7 @@ class Pick(BaseModel):
         "Draft"
     )  # , back_populates="picks") TODO: is this possible to split up and do we need it
     seat = relationship("Seat", back_populates="picks")
-    card = relationship("Card")
+    card = relationship("Card", lazy="selectin")
 
     __table_args__ = (
         PrimaryKeyConstraint(draft_id, pick_no),

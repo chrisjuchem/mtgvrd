@@ -1,7 +1,6 @@
 import os
 
 import pytest
-from sqlalchemy import func
 
 from app.db.connection import ensure_session
 from app.db.models import User
@@ -48,9 +47,6 @@ def db_session():
 @pytest.fixture(scope="session")
 def user_factory(db_session):
     def factory(fields: dict):
-        fields.setdefault("last_login", func.now())
-        fields.setdefault("discord_id", "1234")
-
         usr = User.from_dict(fields)
         db_session.add(usr)
         db_session.commit()

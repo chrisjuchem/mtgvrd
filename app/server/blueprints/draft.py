@@ -8,7 +8,12 @@ from app.server.decorators.validation import validate
 from app.server.enums import ParamSources, StatusCodes, UserDraftRelationship
 from app.server.formatters.draft import format_draft, format_seat
 from app.server.formatters.list import format_list
-from app.server.trafarets.draft import create_draft_trafaret, list_draft_trafaret, pick_trafaret
+from app.server.trafarets.draft import (
+    create_draft_trafaret,
+    join_draft_trafaret,
+    list_draft_trafaret,
+    pick_trafaret,
+)
 
 draft_routes = Blueprint("Draft", __name__)
 
@@ -49,16 +54,28 @@ def get_draft(draft):
 
 @draft_routes.route("/<record(model=Draft):draft>/join", methods=["POST"])
 @login_required
-def join_draft(draft):
+@validate(ParamSources.JSON, join_draft_trafaret)
+def join_draft(validated_data, draft):
     if len(draft.seats) >= draft.n_seats:
         return {"error": "Draft is full"}, StatusCodes.HTTP_409_CONFLICT
-    if g.current_user in draft.players:
+    if not draft.multiseat and g.current_user in draft.players:
         return {"error": "You already joined this draft"}, StatusCodes.HTTP_409_CONFLICT
+
+    seat_no = validated_data.get("seat_no")
+    if draft.random_seats or seat_no is None:
+        seat_no = draft.next_seat_no
+    elif seat_no >= draft.n_seats:
+        return {
+            "errors": {"seat_no": f"Must be less than {draft.n_seats}"}
+        }, StatusCodes.HTTP_422_UNPROCESSABLE_ENTITY
+
+    if seat_no in [seat.seat_no for seat in draft.seats]:
+        return {"error": "Seat is already filled"}, StatusCodes.HTTP_409_CONFLICT
 
     seat = Seat.from_dict(
         {
             "draft_id": draft.id,
-            "seat_no": len(draft.seats),  # TODO: min open seat to support choosing seats
+            "seat_no": seat_no,
             "player_id": g.current_user.id,
         }
     )
@@ -130,5 +147,6 @@ def submit_pick(validated_data, draft):
         draft.finalize_picks()
 
     current_session.commit()
+    current_session.refresh(draft)
 
     return format_draft(draft), StatusCodes.HTTP_201_CREATED
