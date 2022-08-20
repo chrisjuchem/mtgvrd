@@ -39,13 +39,13 @@ def mock_env(monkeypatch):
     monkeypatch.setenv("DISCORD_USER_INFO_URL", DISCORD_USER_INFO_URL)
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def db_session():
     with ensure_session() as ses:
         yield ses
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def user_factory(db_session):
     def factory(fields: dict):
         fields.setdefault("last_login", func.now())
@@ -59,7 +59,7 @@ def user_factory(db_session):
     return factory
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def client_factory():
     def factory():
         with app.test_client() as client:
@@ -78,13 +78,13 @@ def session_user(user_factory):
     return user_factory({"username": "session_user"})
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def user_client_factory(client_factory):
     def factory(user):
         client = client_factory()
         with client.session_transaction() as session:
             session["uid"] = user.id
-        return client
+            return client
 
     return factory
 
@@ -92,3 +92,13 @@ def user_client_factory(client_factory):
 @pytest.fixture
 def session_client(user_client_factory, session_user):
     return user_client_factory(session_user)
+
+
+@pytest.fixture(scope="session")
+def user_and_client_factory(user_factory, user_client_factory):
+    def factory(usr_dict):
+        user = user_factory(usr_dict)
+        client = user_client_factory(user)
+        return user, client
+
+    return factory
